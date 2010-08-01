@@ -5,15 +5,26 @@
 
   <p>
     <%= f.label :user_id %><br />
-    <%= f.text_field :user_id %>
+    <%= f.select :user_id, options_for_select(User.all.map{|u| [u.name, u.id] }) %>
   </p>
   <p>
     <%= f.label :game_id %><br />
-    <%= f.text_field :game_id %>
+    <%= f.select :game_id, options_for_select(Game.all.map{|g| [g.name, g.id] }) %>
   </p>
   <p>
     <%= f.submit 'Create' %>
   </p>
 <% end %>
+
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+    $("#new_seat").submit(function(){
+      $.get("http://localhost:4567/publish?command=post&api_path=/seats/%3Fseat[game_id]="+$("#seat_game_id").val()+"%26seat[user_id]="+$("#seat_user_id").val()+"&channel=/game/"+$("#seat_game_id").val(), function(){
+        window.location = "/seats"
+      });
+      return false;
+    });
+  });
+</script>
 
 <%= link_to 'Back', seats_path %>

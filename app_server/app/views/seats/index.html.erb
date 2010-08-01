@@ -1,4 +1,4 @@
-<h1>Listing seats</h1>
+<h1>Players in games</h1>
 
 <table>
   <tr>
@@ -6,17 +6,29 @@
     <th>Game</th>
   </tr>
 
-<% @seats.each do |seat| %>
+<% @seats.sort_by{|s| s.game_id}.each do |seat| %>
   <tr>
-    <td><%=h seat.user_id %></td>
-    <td><%=h seat.game_id %></td>
-    <td><%= link_to 'Show', seat %></td>
-    <td><%= link_to 'Edit', edit_seat_path(seat) %></td>
-    <td><%= link_to 'Destroy', seat, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%=h seat.user.name %></td>
+    <td><%=h seat.game.name %></td>
+    <td><%= link_to 'Destroy', seat, :seat_id => "#{seat.id}", :game_id => seat.game.id, :class => 'delete' %></td>
   </tr>
 <% end %>
 </table>
-
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+    $.each($(".delete"), function(){
+      onDeleteSeatClick($(this));
+    });
+  });
+  function onDeleteSeatClick(elem){
+    elem.click(function(){
+      $.get("http://localhost:4567/publish?command=delete&api_path=/seats/"+elem.attr('seat_id')+"&channel=/game/"+elem.attr('game_id'), function(){
+        window.location = "/seats"
+      });
+      return false;
+    });
+  }
+</script>
 <br />
 
 <%= link_to 'New seat', new_seat_path %>
