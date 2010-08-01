@@ -1,3 +1,5 @@
+gem install rails faye sinatra
+
 Start app_server with ruby app_server/script/server
 Start faye_server with ruby faye_server/app.rb
 
