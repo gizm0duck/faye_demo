@@ -1,4 +1,4 @@
-gem install rails faye sinatra httparty
+gem install rails faye sinatra httparty --no-rdoc --no-ri
 
 Start app_server with ruby app_server/script/server
 Start faye_server with ruby faye_server/app.rb
