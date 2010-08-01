@@ -1,3 +1,4 @@
+<div style="border: 1px solid #666;">
 <p style="font-size: 20px;">
   <b>Name: <%=h @game.name %></b>
 </p>
@@ -11,12 +12,12 @@
       if (message.response.command == "delete"){
         
         $("#in_game li#user_"+user.id).remove();
-        $("#not_in_game").append("<li id='user_"+user.id+"'>"+user.name+" <a href='#' class='add_seat' user_id='"+user.id+"'>+</a></li>");
+        $("#not_in_game").append("<li id='user_"+user.id+"'><img src='"+user.avatar_url+"'>"+user.name+" <a href='#' class='add_seat' user_id='"+user.id+"'>+</a></li>");
         updateSeatCount(parseInt($("#seat_count").html())-1);
         onAddSeatClick($("#not_in_game li#user_"+user.id+" a"));
       } else{
         $("#not_in_game li#user_"+user.id).remove();
-        $("#in_game").append("<li id='user_"+user.id+"'>"+user.name+" <a href='#' class='remove_seat' seat_id='"+message.response.id+"'>x</a></li>");
+        $("#in_game").append("<li id='user_"+user.id+"'><img src='"+user.avatar_url+"'>"+user.name+" <a href='#' class='remove_seat' seat_id='"+message.response.id+"'>x</a></li>");
         updateSeatCount(parseInt($("#seat_count").html())+1);
         onDeleteSeatClick($("#in_game li#user_"+user.id+" a"));
       }
@@ -51,20 +52,18 @@
   }
 </script>
 Users in Game:
-<ul id="in_game">
+<ul id="in_game" style="list-style-type:none">
   <% @game.seats.each do |seat| %>
-    <li id="user_<%= seat.user.id %>"><%= seat.user.name %> <a href="#" class="delete_seat" seat_id="<%= seat.id %>">x</a></li>
-  <% end %>
-</ul>
-
-Users NOT in Game:
-<ul id="not_in_game">
-  <% (User.all - @game.seats.map{|seat| seat.user}).each do |user| %>
-    <li id="user_<%= user.id %>"><%= user.name %> <a href="#" class="add_seat" user_id="<%= user.id %>">+</a></li>
+    <li id="user_<%= seat.user.id %>"><%= image_tag seat.user.avatar_url %> <%= seat.user.name %> <a href="#" class="delete_seat" seat_id="<%= seat.id %>">x</a></li>
   <% end %>
 </ul>
 
 Seats in this game: <span id="seat_count" style="font-size: 20px;"><%= @game.seats.count %></span>
 <br /><br /><br />
-<%= link_to 'Edit', edit_game_path(@game) %> |
-<%= link_to 'Back', games_path %>
+</div>
+Users NOT in Game:
+<ul id="not_in_game" style="list-style-type:none">
+  <% (User.all - @game.seats.map{|seat| seat.user}).each do |user| %>
+    <li id="user_<%= user.id %>"><%= image_tag user.avatar_url %> <%= user.name %> <a href="#" class="add_seat" user_id="<%= user.id %>">+</a></li>
+  <% end %>
+</ul>
